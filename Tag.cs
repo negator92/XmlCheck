@@ -24,6 +24,8 @@ public class Tag
             {
                 if (!File.Exists(xmlFile))
                     throw new FileNotFoundException();
+                else if (Path.GetExtension(xmlFile) != ".xml")
+                    Console.WriteLine("{0} не XML файл", xmlFile);
             }
             catch (FileNotFoundException)
             {
@@ -34,4 +36,9 @@ public class Tag
                 Console.WriteLine(ex.Message);
             }
     }
+
+/*    public static void Checking
+    {
+
+    }*/
 }
