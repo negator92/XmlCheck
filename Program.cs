@@ -10,6 +10,7 @@ namespace XmlCheck
         static void Main(string[] args)
         {
             Tag.CallPrg(args);
+            Tag.ExitsingFile(args);
             foreach (string xmlFile in args)
                 //Checking file exist
                 if (!File.Exists(xmlFile))
