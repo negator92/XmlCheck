@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 public class Tag
 {
@@ -42,12 +43,12 @@ public class Tag
             }
     }
 
-    public static void CheckingXmlReader()
+    public static void CheckingXmlReader(string xmlFile)
     {
         using (XmlReader reader = XmlReader.Create(xmlFile))
                     {
                         Console.WriteLine(xmlFile);
-                        Tag.PayCaseCounter = 0;
+                        PayCaseCounter = 0;
                         //Open stream with "read" status
                         while (reader.Read())
                         {
@@ -56,8 +57,8 @@ public class Tag
                             switch (reader.Name)
                             {
                                 case "НомерВыплатногоДела":
-                                    Tag.PayCaseNumber = reader.ReadElementContentAsInt();
-                                    Tag.PayCaseCounter++;
+                                    PayCaseNumber = reader.ReadElementContentAsInt();
+                                    PayCaseCounter++;
                                     break;
                                 case "Фамилия":
                                     string secondName = reader.ReadElementContentAsString();
@@ -67,7 +68,7 @@ public class Tag
                                     {
                                         FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
                                         StreamWriter writer = new StreamWriter(file);
-                                        writer.Write("{0}\n", Tag.PayCaseNumber);
+                                        writer.Write("{0}\n", PayCaseNumber);
                                         writer.Close();
                                         Console.WriteLine(secondName);
                                         break;
@@ -80,7 +81,7 @@ public class Tag
                                     {
                                         FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
                                         StreamWriter writer = new StreamWriter(file);
-                                        writer.Write("{0}\n", Tag.PayCaseNumber);
+                                        writer.Write("{0}\n", PayCaseNumber);
                                         writer.Close();
                                         Console.WriteLine(firstName);
                                         break;
@@ -93,14 +94,14 @@ public class Tag
                                     {
                                         FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
                                         StreamWriter writer = new StreamWriter(file);
-                                        writer.Write("{0}\n", Tag.PayCaseNumber);
+                                        writer.Write("{0}\n", PayCaseNumber);
                                         writer.Close();
                                         Console.WriteLine(middleName);
                                         break;
                                     }
                             }
                         }
-                        Console.WriteLine(Tag.PayCaseCounter);
+                        Console.WriteLine(PayCaseCounter);
                         reader.Close();
                     }
     }
