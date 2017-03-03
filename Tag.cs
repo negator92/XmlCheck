@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 public class Tag
 {
     public static int PayCaseCounter;
     public static int PayCaseNumber;
+    Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$");
 
     public static void CallPrg(string[] args)
     {
