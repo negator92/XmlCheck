@@ -9,6 +9,7 @@ namespace XmlCheck
     {
         static void Main(string[] args)
         {
+            //All actions should be called from special class
             Tag.CallPrg(args);
             Tag.ExitsingFile(args);
         }

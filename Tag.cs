@@ -8,21 +8,29 @@ public class Tag
     public static int PayCaseCounter;
     public static int PayCaseNumber;
     Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$");
+    public static string[] array;
 
     public static void CallPrg(string[] args)
     {
         //Checking for arguments
         if (args.Length == 0)
             Console.WriteLine("Использование: XmlCheck.exe file.xml");
-        else if (args.Length == 1)
+        else
         {
-            Console.WriteLine("1 arg");
+            foreach (string arg1 in args)
+            {
+                string[] array = Directory.GetFiles(".", arg1);
+                for (int i = 0; i < array.Length; i++)
+                    {
+                        Console.WriteLine("Argument {0} link to {1} file.", arg1, array[i]);
+                    }
+            }
         }
     }
 
-    public static void ExitsingFile(string[] args)
+    public static void ExitsingFile(string[] array)
     {
-        foreach (string xmlFile in args)
+        foreach (string xmlFile in array)
             try
             {
                 if (!File.Exists(xmlFile))
