@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -7,8 +9,7 @@ public class Tag
 {
     public static int PayCaseCounter;
     public static int PayCaseNumber;
-    Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$");
-    public static string[] array;
+    //public static string[] array;
 
     public static void CallPrg(string[] args)
     {
@@ -17,12 +18,12 @@ public class Tag
             Console.WriteLine("Использование: XmlCheck.exe file.xml");
         else
         {
-            foreach (string arg1 in args)
+            foreach (string arg in args)
             {
-                string[] array = Directory.GetFiles(".", arg1);
+                string[] array = (args.SelectMany(arg1 => Directory.GetFiles(".", arg)).Distinct()).ToArray();
                 for (int i = 0; i < array.Length; i++)
                     {
-                        Console.WriteLine("Argument {0} link to {1} file.", arg1, array[i]);
+                        Console.WriteLine("Argument {0} link to {1} file.", arg, array[i]);
                     }
             }
         }
