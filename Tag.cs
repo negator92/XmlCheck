@@ -7,15 +7,19 @@ using System.Xml;
 
 public class Tag
 {
-    public static int PayCaseCounter;
-    public static int PayCaseNumber;
-    //public static string[] array;
+    public static int payCaseCounter;
+    public static int payCaseNumber;
+    public static string[] array;
 
-    public static void CallPrg(string[] args)
+    public static string[] CallPrg(string[] args)
     {
         //Checking for arguments
         if (args.Length == 0)
-            Console.WriteLine("Использование: XmlCheck.exe file.xml");
+        {
+            array[0] = "Использование: XmlCheck.exe file.xml";
+            Console.WriteLine(array[0]);
+            return array;
+        }
         else
         {
             foreach (string arg in args)
@@ -26,6 +30,7 @@ public class Tag
                         Console.WriteLine("Argument {0} link to {1} file.", arg, array[i]);
                     }
             }
+            return array;
         }
     }
 
@@ -57,7 +62,7 @@ public class Tag
         using (XmlReader reader = XmlReader.Create(xmlFile))
                     {
                         Console.WriteLine(xmlFile);
-                        PayCaseCounter = 0;
+                        payCaseCounter = 0;
                         //Open stream with "read" status
                         while (reader.Read())
                         {
@@ -66,8 +71,8 @@ public class Tag
                             switch (reader.Name)
                             {
                                 case "НомерВыплатногоДела":
-                                    PayCaseNumber = reader.ReadElementContentAsInt();
-                                    PayCaseCounter++;
+                                    payCaseNumber = reader.ReadElementContentAsInt();
+                                    payCaseCounter++;
                                     break;
                                 case "Фамилия":
                                     string secondName = reader.ReadElementContentAsString();
@@ -77,7 +82,7 @@ public class Tag
                                     {
                                         FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
                                         StreamWriter writer = new StreamWriter(file);
-                                        writer.Write("{0}\n", PayCaseNumber);
+                                        writer.Write("{0}\n", payCaseNumber);
                                         writer.Close();
                                         Console.WriteLine(secondName);
                                         break;
@@ -90,7 +95,7 @@ public class Tag
                                     {
                                         FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
                                         StreamWriter writer = new StreamWriter(file);
-                                        writer.Write("{0}\n", PayCaseNumber);
+                                        writer.Write("{0}\n", payCaseNumber);
                                         writer.Close();
                                         Console.WriteLine(firstName);
                                         break;
@@ -103,14 +108,14 @@ public class Tag
                                     {
                                         FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
                                         StreamWriter writer = new StreamWriter(file);
-                                        writer.Write("{0}\n", PayCaseNumber);
+                                        writer.Write("{0}\n", payCaseNumber);
                                         writer.Close();
                                         Console.WriteLine(middleName);
                                         break;
                                     }
                             }
                         }
-                        Console.WriteLine(PayCaseCounter);
+                        Console.WriteLine(payCaseCounter);
                         reader.Close();
                     }
     }
