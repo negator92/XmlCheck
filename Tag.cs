@@ -11,14 +11,13 @@ public class Tag
     public static int payCaseNumber;
     public static string[] array;
 
-    public static string[] CallPrg(string[] args)
+    public static void CallPrg(string[] args)
     {
         //Checking for arguments
         if (args.Length == 0)
         {
             array[0] = "Использование: XmlCheck.exe file.xml";
             Console.WriteLine(array[0]);
-            return array;
         }
         else
         {
@@ -30,7 +29,7 @@ public class Tag
                         Console.WriteLine("Argument {0} link to {1} file.", arg, array[i]);
                     }
             }
-            return array;
+        ExitsingFile(array);
         }
     }
     

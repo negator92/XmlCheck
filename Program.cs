@@ -11,7 +11,6 @@ namespace XmlCheck
         {
             //All actions should be called from special class
             Tag.CallPrg(args);
-            Tag.ExitsingFile(args);
         }
     }
 }
