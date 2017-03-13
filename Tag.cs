@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -17,8 +17,7 @@ public class Tag
         //Checking for arguments
         if (args.Length == 0)
         {
-            array[0] = "Использование: XmlCheck.exe file.xml";
-            Console.WriteLine(array[0]);
+            Console.WriteLine("Использование: XmlCheck.exe file.xml");
         }
         else
         {
@@ -46,7 +45,6 @@ public class Tag
                 else
                     //Need to add RAM check, which initialise use XmlReader or XPath
                     getAvailableRam(xmlFile);
-                    CheckingXmlReader(xmlFile);
             }
             catch (FileNotFoundException)
             {
@@ -61,7 +59,110 @@ public class Tag
     public static void getAvailableRam(string xmlFile)
     {
         PerformanceCounter ramFree = new PerformanceCounter("Memory", "Available MBytes");
-        Console.WriteLine(ramFree.NextValue() + " MB");
+        FileInfo someFileInfo = new FileInfo(xmlFile);
+        long fileByteSize = someFileInfo.Length;
+        Console.WriteLine("{0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
+        //if (ramFree.NextValue() < xmlFile.Length / 1024 / 1024 * 2)
+            CheckingXmlReader(xmlFile);
+    }
+
+    public static void CheckingXPath(string xmlFile)
+    {
+        List<int> numbers = new List<int>();
+        //"загрузка" проверяемого файла
+        XmlDocument xDoc = new XmlDocument();
+        xDoc.Load(xmlFile);
+        XmlElement xRoot = xDoc.DocumentElement;
+
+        //условия для проверки регулярным выражением
+        Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$");
+
+        // выбор всех(повторений) тегов, вложенных по определенной структуре
+        XmlNodeList NumPayId = xRoot.SelectNodes(".//НомерВыплатногоДела");
+        //m.InnerText.Length == 0
+        foreach (XmlNode PayCaseNumber in NumPayId)
+        {
+            numbers.Add(Int32.Parse(PayCaseNumber.InnerText));
+        }
+        Console.WriteLine(numbers.Count);
+
+        try
+        {
+            XmlNodeList SurnameTag = xRoot.SelectNodes(".//Фамилия");
+            payCaseCounter = 0;
+            foreach (XmlNode SecondName in SurnameTag)
+            //Console.WriteLine(n.InnerText);
+            {
+                if (regex.IsMatch(SecondName.InnerText))
+                    payCaseCounter++;
+                else
+                {
+                    FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
+                    StreamWriter writer = new StreamWriter(file);
+                    writer.Write(numbers[payCaseCounter] + "\n");
+                    writer.Close();
+                    //Console.WriteLine(numbers[c]);
+                    Console.WriteLine(SecondName.InnerText);
+                    payCaseCounter++;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка: " + ex.Message);
+        }
+
+        try
+        {
+            XmlNodeList NameTag = xRoot.SelectNodes(".//Имя");
+            payCaseCounter = 0;
+            foreach (XmlNode FirstName in NameTag)
+            //Console.WriteLine(n.InnerText);
+            {
+                if (regex.IsMatch(FirstName.InnerText))
+                    payCaseCounter++;
+                else
+                {
+                    FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
+                    StreamWriter writer = new StreamWriter(file);
+                    writer.Write(numbers[payCaseCounter] + "\n");
+                    writer.Close();
+                    //Console.WriteLine(numbers[c]);
+                    Console.WriteLine(FirstName.InnerText);
+                    payCaseCounter++;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка: " + ex.Message);
+        }
+
+        try
+        {
+            XmlNodeList FnameTag = xRoot.SelectNodes(".//Отчество");
+            payCaseCounter = 0;
+            foreach (XmlNode MiddleName in FnameTag)
+            //Console.WriteLine(n.InnerText);
+            {
+                if (MiddleName.InnerText.Length == 0 || regex.IsMatch(MiddleName.InnerText))
+                    payCaseCounter++;
+                else
+                {
+                    FileStream file = new FileStream(xmlFile + ".log", FileMode.Append);
+                    StreamWriter writer = new StreamWriter(file);
+                    writer.Write(numbers[payCaseCounter] + "\n");
+                    writer.Close();
+                    //Console.WriteLine(numbers[c]);
+                    Console.WriteLine(MiddleName.InnerText);
+                    payCaseCounter++;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка: " + ex.Message);
+        }
     }
 
     public static void CheckingXmlReader(string xmlFile)
