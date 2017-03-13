@@ -24,7 +24,7 @@ public class Tag
         {
             foreach (string arg in args)
             {
-                string[] array = (args.SelectMany(arg1 => Directory.GetFiles(".", arg)).Distinct()).ToArray();
+                array = (args.SelectMany(arg1 => Directory.GetFiles(".", arg)).Distinct()).ToArray();
                 for (int i = 0; i < array.Length; i++)
                     {
                         Console.WriteLine("Argument {0} link to {1} file.", arg, array[i]);
@@ -33,7 +33,7 @@ public class Tag
             return array;
         }
     }
-
+    
     public static void ExitsingFile(string[] array)
     {
         foreach (string xmlFile in array)
