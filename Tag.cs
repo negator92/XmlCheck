@@ -62,8 +62,16 @@ public class Tag
         FileInfo someFileInfo = new FileInfo(xmlFile);
         long fileByteSize = someFileInfo.Length;
         Console.WriteLine("{0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
-        //if (ramFree.NextValue() < xmlFile.Length / 1024 / 1024 * 2)
+        if (ramFree.NextValue() > xmlFile.Length / 1024 / 1024 * 2)
+        {
+            Console.WriteLine("Xpath {0}", (ramFree.NextValue() > xmlFile.Length / 1024 / 1024 * 2));
+            CheckingXPath(xmlFile);
+        }
+        else
+        {
+            Console.WriteLine("XmlReader {0}", (ramFree.NextValue() > xmlFile.Length / 1024 / 1024 * 2));
             CheckingXmlReader(xmlFile);
+        }
     }
 
     public static void CheckingXPath(string xmlFile)
