@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -44,6 +45,7 @@ public class Tag
                     Console.WriteLine("{0} не XML файл", xmlFile);
                 else
                     //Need to add RAM check, which initialise use XmlReader or XPath
+                    getAvailableRam(xmlFile);
                     CheckingXmlReader(xmlFile);
             }
             catch (FileNotFoundException)
@@ -54,6 +56,12 @@ public class Tag
             {
                 Console.WriteLine(ex.Message);
             }
+    }
+
+    public static void getAvailableRam(string xmlFile)
+    {
+        PerformanceCounter ramFree = new PerformanceCounter("Memory", "Available MBytes");
+        Console.WriteLine(ramFree.NextValue() + " MB");
     }
 
     public static void CheckingXmlReader(string xmlFile)
