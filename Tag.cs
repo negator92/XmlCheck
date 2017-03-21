@@ -11,6 +11,7 @@ public class Tag
     public static int payCaseCounter;
     public static int payCaseNumber;
     public static string[] array;
+    public static Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$", RegexOptions.Compiled);
 
     public static void CallPrg(string[] args)
     {
@@ -60,18 +61,20 @@ public class Tag
     public static void getAvailableRam(string xmlFile)
     {
         PerformanceCounter ramFree = new PerformanceCounter("Memory", "Available MBytes");
+        /*ComputerInfo CI = new ComputerInfo();
+        ulong mem = ulong.Parse(CI.AvailablePhysicalMemory.ToString());*/
         FileInfo someFileInfo = new FileInfo(xmlFile);
         long fileByteSize = someFileInfo.Length;
         //Console.WriteLine("{0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
-        if (ramFree.NextValue() > xmlFile.Length / 1024 / 1024 * 2)
-        {
-            Console.WriteLine("Xpath. {0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
-            CheckingXPath(xmlFile);
-        }
-        else
+        if (xmlFile.Length > 2097152000 || ramFree.NextValue() < xmlFile.Length / 1024 / 1024 * 2)
         {
             Console.WriteLine("XmlReader. {0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
             CheckingXmlReader(xmlFile);
+        }
+        else
+        {
+            Console.WriteLine("Xpath. {0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
+            CheckingXPath(xmlFile);
         }
     }
 
@@ -84,7 +87,7 @@ public class Tag
         XmlElement xRoot = xDoc.DocumentElement;
 
         //условия для проверки регулярным выражением
-        Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$");
+        //public static Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$", RegexOptions.Compiled);
 
         // выбор всех(повторений) тегов, вложенных по определенной структуре
         XmlNodeList NumPayId = xRoot.SelectNodes(".//НомерВыплатногоДела");
@@ -185,7 +188,7 @@ public class Tag
                         while (reader.Read())
                         {
                             //Regular expr
-                            Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$");
+                            //Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$");
                             switch (reader.Name)
                             {
                                 case "НомерВыплатногоДела":
