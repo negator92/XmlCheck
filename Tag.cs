@@ -24,10 +24,11 @@ public class Tag
             foreach (string arg in args)
             {
                 array = (args.SelectMany(arg1 => Directory.GetFiles(".", arg)).Distinct()).ToArray();
-                for (int i = 0; i < array.Length; i++)
+                //Show files to check
+                /*for (int i = 0; i < array.Length; i++)
                     {
                         Console.WriteLine("Argument {0} link to {1} file.", arg, array[i]);
-                    }
+                    }*/
             }
         ExitsingFile(array);
         }
@@ -61,15 +62,15 @@ public class Tag
         PerformanceCounter ramFree = new PerformanceCounter("Memory", "Available MBytes");
         FileInfo someFileInfo = new FileInfo(xmlFile);
         long fileByteSize = someFileInfo.Length;
-        Console.WriteLine("{0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
+        //Console.WriteLine("{0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
         if (ramFree.NextValue() > xmlFile.Length / 1024 / 1024 * 2)
         {
-            Console.WriteLine("Xpath {0}", (ramFree.NextValue() > xmlFile.Length / 1024 / 1024 * 2));
+            Console.WriteLine("Xpath. {0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
             CheckingXPath(xmlFile);
         }
         else
         {
-            Console.WriteLine("XmlReader {0}", (ramFree.NextValue() > xmlFile.Length / 1024 / 1024 * 2));
+            Console.WriteLine("XmlReader. {0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
             CheckingXmlReader(xmlFile);
         }
     }
@@ -177,6 +178,7 @@ public class Tag
     {
         using (XmlReader reader = XmlReader.Create(xmlFile))
                     {
+                        var watch = System.Diagnostics.Stopwatch.StartNew();
                         Console.WriteLine(xmlFile);
                         payCaseCounter = 0;
                         //Open stream with "read" status
@@ -233,6 +235,9 @@ public class Tag
                         }
                         Console.WriteLine(payCaseCounter);
                         reader.Close();
+                        watch.Stop();
+                        var elapsedMs = watch.ElapsedMilliseconds;
+                        Console.WriteLine("Checking {0} takes {1} miliseconds", xmlFile, elapsedMs);
                     }
     }
 }
