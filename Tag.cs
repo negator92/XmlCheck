@@ -11,6 +11,7 @@ public class Tag
     public static int payCaseCounter;
     public static int payCaseNumber;
     public static string[] array;
+    public static string xmlHead = "<?xml version=\"1.0\" encoding=\"WINDOWS-1251\"?>";
     public static Regex regex = new Regex(@"^([А-ЯЁ]+)([\s\-]?[А-ЯЁ]+)*$", RegexOptions.Compiled);
 
     public static void CallPrg(string[] args)
