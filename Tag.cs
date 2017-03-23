@@ -42,7 +42,9 @@ public class Tag
             {
                 if (!File.Exists(xmlFile))
                     throw new FileNotFoundException();
-                else if (Path.GetExtension(xmlFile) != ".xml")
+                /*else if (Path.GetExtension(xmlFile) != ".xml")
+                    Console.WriteLine("{0} не XML файл", xmlFile);*/
+                else if (xmlHead != File.ReadLines(xmlFile).First())
                     Console.WriteLine("{0} не XML файл", xmlFile);
                 else
                     //Need to add RAM check, which initialise use XmlReader or XPath
