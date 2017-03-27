@@ -67,7 +67,7 @@ public class Tag
         FileInfo someFileInfo = new FileInfo(xmlFile);
         long fileByteSize = someFileInfo.Length;
         //Console.WriteLine("{0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
-        if (fileByteSize > 2097152000 || ramFree.NextValue() < fileByteSize / 1024 / 1024 * 2)
+        if (fileByteSize > 2097152000 && ramFree.NextValue() < fileByteSize / 1024 / 1024 * 2)
         {
             Console.WriteLine("XmlReader. {0} file is {1}MB and free RAM is {2}MB.", xmlFile, someFileInfo.Length / 1024 / 1024, ramFree.NextValue());
             CheckingXmlReader(xmlFile);
